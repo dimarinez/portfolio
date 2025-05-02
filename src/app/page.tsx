@@ -76,7 +76,7 @@ export default function Home() {
       id: 'ugg',
       name: 'UGG',
       image: '/screenshots/ugg.png',
-      overview: 'As lead engineer, I shaped UGG’s Salesforce Commerce Cloud storefront, building dynamic PDPs, PLPs, and navigation. My optimizations and leadership with vendors cut page load times by 30%, enhancing user experience across Deckers’ brands.',
+      overview: 'As lead engineer, I shaped UGG’s Salesforce Commerce Cloud storefront, building dynamic PDPs, PLPs, and navigation.',
       galleryImages: [
         '/screenshots/ugg.png',
         '/projects/ugg.png',
