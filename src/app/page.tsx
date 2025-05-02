@@ -127,7 +127,7 @@ export default function Home() {
       id: 'disney',
       name: 'Disney',
       image: '/screenshots/disney.png',
-      overview: 'I revamped Disney Store’s front-end, creating personalized PDPs and optimized navigation, and led Apple Pay integration. The style guide overhaul and rebranding efforts increased checkout completions by 15%.',
+      overview: 'I revamped Disney Store’s front-end, creating personalized PDPs and optimized navigation, and led Apple Pay integration.',
       galleryImages: [
         '/screenshots/disney.png',
         '/projects/disney.png',
