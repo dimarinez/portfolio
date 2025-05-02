@@ -690,7 +690,7 @@ export default function Home() {
       )}
 
       {/* Main Content */}
-      <div className={`min-h-screen bg-[#1A1A1A] text-white font-custom overflow-x-hidden ${loading ? 'opacity-0' : 'opacity-100'}`}>
+      <div className={`pb-[env(safe-area-inset-bottom)] min-h-screen bg-[#1A1A1A] text-white font-custom overflow-x-hidden ${loading ? 'opacity-0' : 'opacity-100'}`}>
         {/* Canvas Background (unchanged) */}
         <CanvasManager />
 
