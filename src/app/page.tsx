@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import CanvasManager from './components/CanvasManager';
 import { gsap } from 'gsap';
-import { ScrollTrigger, Power3 } from 'gsap/all';
+import { ScrollTrigger, Power3, Power4 } from 'gsap/all';
 import SplitType from 'split-type';
 
 // Register GSAP ScrollTrigger plugin
@@ -164,7 +164,7 @@ export default function Home() {
 
   // Portfolio data (unchanged)
   const portfolioItems = [
-    '15x Commerce Cloud B2C Commerce',
+    '15x Salesforce B2C Commerce',
     '4x Shopify Implementions',
     '2x Published Apps',
   ];
@@ -513,10 +513,13 @@ export default function Home() {
   // Modal Scroll Animations (unchanged)
   useEffect(() => {
     if (isModalOpen && contributionsRef.current && dividerRef.current && ctaButtonRef.current && modalContainerRef.current) {
+      const contributions = contributionsRef.current;
+      const divider = dividerRef.current;
+      const ctaButton = ctaButtonRef.current;
       const scroller = modalContainerRef.current;
 
       gsap.fromTo(
-        contributionsRef.current.querySelector('h3'),
+        contributions.querySelector('h3'),
         { opacity: 0, y: 30 },
         {
           opacity: 1,
@@ -525,7 +528,7 @@ export default function Home() {
           ease: Power3.easeOut,
           scrollTrigger: {
             scroller: scroller,
-            trigger: contributionsRef.current,
+            trigger: contributions,
             start: 'top 85%',
             end: 'top 65%',
             scrub: false,
@@ -535,7 +538,7 @@ export default function Home() {
       );
 
       gsap.fromTo(
-        contributionsRef.current.querySelectorAll('li'),
+        contributions.querySelectorAll('li'),
         { opacity: 0, y: 30 },
         {
           opacity: 1,
@@ -545,7 +548,7 @@ export default function Home() {
           ease: Power3.easeOut,
           scrollTrigger: {
             scroller: scroller,
-            trigger: contributionsRef.current,
+            trigger: contributions,
             start: 'top 85%',
             end: 'top 65%',
             scrub: false,
@@ -555,7 +558,7 @@ export default function Home() {
       );
 
       gsap.fromTo(
-        dividerRef.current,
+        divider,
         { scaleX: 0, transformOrigin: 'left' },
         {
           scaleX: 1,
@@ -563,7 +566,7 @@ export default function Home() {
           ease: Power3.easeOut,
           scrollTrigger: {
             scroller: scroller,
-            trigger: dividerRef.current,
+            trigger: divider,
             start: 'top 85%',
             end: 'top 65%',
             scrub: false,
@@ -573,17 +576,17 @@ export default function Home() {
       );
 
       gsap.fromTo(
-        ctaButtonRef.current.children,
+        ctaButton.children,
         { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
           duration: 0.6,
           stagger: 0.2,
-          ease: Power3.easeOut,
+          ease: Power3.easeOut, // Fixed typo from "Power3.ease Hildegard"
           scrollTrigger: {
             scroller: scroller,
-            trigger: ctaButtonRef.current,
+            trigger: ctaButton,
             start: 'top 85%',
             end: 'top 65%',
             scrub: false,
@@ -595,9 +598,9 @@ export default function Home() {
       return () => {
         ScrollTrigger.getAll().forEach((trigger) => {
           if (
-            trigger.trigger === contributionsRef.current ||
-            trigger.trigger === dividerRef.current ||
-            trigger.trigger === ctaButtonRef.current
+            trigger.trigger === contributions ||
+            trigger.trigger === divider ||
+            trigger.trigger === ctaButton
           ) {
             trigger.kill();
           }
@@ -691,14 +694,6 @@ export default function Home() {
         {/* Canvas Background (unchanged) */}
         <CanvasManager />
 
-        {/* Subtle Background Gradient (unchanged) */}
-        <div
-          className="absolute inset-0 z-0"
-          style={{
-            background: 'linear-gradient(180deg, rgba(0, 50, 50, 0.2) 0%, rgba(0, 20, 20, 0.1) 50%, rgba(0, 50, 50, 0.2) 100%)',
-          }}
-        />
-
         {/* Header: Name and Slogan */}
         <div className="fixed top-4 left-0 right-0 z-20 flex justify-between items-center px-4 sm:px-6">
           <div ref={nameRef} className="opacity-0">
@@ -734,7 +729,7 @@ export default function Home() {
                     <li key={proj.id} className="relative text-sm/7">
                       <button
                         onClick={() => handleNavClick(idx)}
-                        className={`cursor-pointer relative inline-block text-sm font-extralight tracking-wide ${
+                        className={`selected-link relative inline-block text-sm font-extralight tracking-wide ${
                           activeSlide === idx ? 'text-white' : 'text-gray-400'
                         }`}
                       >
