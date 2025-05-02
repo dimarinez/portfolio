@@ -92,7 +92,7 @@ export default function Home() {
       id: 'asics',
       name: 'ASICS',
       image: '/screenshots/asics.png',
-      overview: 'I developed global contact and warranty forms for ASICS’ Next.js site, powered by Contentstack CMS, supporting regions like Australia and Europe. Using Material-UI CSS and React Hook Forms, I ensured a polished, validated UI, reducing form errors by 40%.',
+      overview: 'I developed global contact and warranty forms for ASICS’ Next.js site, powered by Contentstack CMS, supporting regions like Australia and Europe. Using Material-UI CSS and React Hook Forms, I ensured a polished, validated UI, reducing form errors.',
       galleryImages: [
         '/screenshots/asics.png',
         '/projects/asics.png',
