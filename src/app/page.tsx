@@ -165,8 +165,8 @@ export default function Home() {
   // Portfolio data (unchanged)
   const portfolioItems = [
     '15x Salesforce B2C Commerce',
-    '4x Shopify Implementions',
     '2x Published Apps',
+    '3x Shopify',
   ];
 
   useEffect(() => {
@@ -682,7 +682,7 @@ export default function Home() {
       {/* Tooltip (unchanged) */}
       {(tooltipVisible && animationComplete) && (
         <div
-          className="fixed z-50 bg-black bg-opacity-80 text-white text-xs px-2 py-1 rounded"
+          className="max-sm:hidden fixed z-50 bg-black bg-opacity-80 text-white text-xs px-2 py-1 rounded"
           style={{ top: tooltipPosition.y, left: tooltipPosition.x }}
         >
           View Case Study
@@ -690,7 +690,7 @@ export default function Home() {
       )}
 
       {/* Main Content */}
-      <div className={`min-h-screen bg-[#1A1A1A] text-white font-custom overflow-x-hidden ${loading ? 'opacity-0' : 'opacity-100'}`}>
+      <div className={`max-sm:fixed max-sm:left-0 max-sm:right-0 min-h-screen bg-[#1A1A1A] text-white font-custom overflow-x-hidden ${loading ? 'opacity-0' : 'opacity-100'}`}>
         {/* Canvas Background (unchanged) */}
         <CanvasManager />
 
@@ -907,35 +907,35 @@ export default function Home() {
               </p>
             </div>
           </div>
-          <div className="flex max-sm:flex-row max-sm:gap-4 flex-col md:justify-end">
-          <div ref={footerCenterRef} className="flex flex-col space-y-2 opacity-0 sm:order-1 sm:flex-1 sm:text-center md:mx-auto md:left-0 md:right-0 md:absolute md:justify-end md:bottom-6 md:fixed">
-            <h4 className="text-xs font-extralight text-gray-400 mb-1">Hire Me (Available May 2025)</h4>
-            <p className="text-sm font-extralight text-white">
-              <a
-                href="mailto:dillonmarinez@gmail.com"
-                className="text-white relative group"
-              >
-                dillonmarinez@gmail.com
-                <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-gray-400 transition-all duration-300 group-hover:w-full" />
-              </a>
-            </p>
-          </div>
-          <div ref={footerRightRef} className="flex flex-col justify-end space-y-2 opacity-0 sm:order-2">
-            <h4 className="text-xs font-extralight text-gray-400 mb-1">Social Media</h4>
-            <div className="flex space-x-4">
-              <Link href="https://instagram.com/dillonmarinez" className="text-xs font-extralight text-white relative group">
-                Instagram
-                <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-gray-400 transition-all duration-300 group-hover:w-full" />
-              </Link>
-              <Link
-                href="https://www.linkedin.com/in/dillon-marinez-9810b6114/"
-                className="text-xs font-extralight text-white relative group"
-              >
-                LinkedIn
-                <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-gray-400 transition-all duration-300 group-hover:w-full" />
-              </Link>
+          <div className="flex max-sm:flex-row max-sm:gap-4 flex-col md:justify-end max-sm:justify-between">
+            <div ref={footerCenterRef} className="flex flex-col space-y-2 opacity-0 sm:order-1 sm:flex-1 sm:text-center md:mx-auto md:left-0 md:right-0 md:absolute md:justify-end md:bottom-6 md:fixed">
+              <h4 className="text-xs font-extralight text-gray-400 mb-1">Hire Me (Available May 2025)</h4>
+              <p className="text-sm font-extralight text-white">
+                <a
+                  href="mailto:dillonmarinez@gmail.com"
+                  className="text-white relative group"
+                >
+                  dillonmarinez@gmail.com
+                  <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-gray-400 transition-all duration-300 group-hover:w-full" />
+                </a>
+              </p>
             </div>
-          </div>
+            <div ref={footerRightRef} className="flex flex-col justify-end space-y-2 opacity-0 sm:order-2">
+              <h4 className="text-xs font-extralight text-gray-400 mb-1">Social Media</h4>
+              <div className="flex space-x-4">
+                <Link href="https://instagram.com/dillonmarinez" className="text-xs font-extralight text-white relative group">
+                  Instagram
+                  <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-gray-400 transition-all duration-300 group-hover:w-full" />
+                </Link>
+                <Link
+                  href="https://www.linkedin.com/in/dillon-marinez-9810b6114/"
+                  className="text-xs font-extralight text-white relative group"
+                >
+                  LinkedIn
+                  <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-gray-400 transition-all duration-300 group-hover:w-full" />
+                </Link>
+              </div>
+            </div>
           </div>
         </footer>
       </div>
