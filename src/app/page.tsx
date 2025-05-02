@@ -310,7 +310,6 @@ export default function Home() {
     };
   }, [loading, isUserInteracting, activeSlide, projects.length]);
 
-  // GSAP Animations and Scroll-Based Slider (unchanged)
   useEffect(() => {
     if (loading) return;
   
@@ -620,7 +619,6 @@ export default function Home() {
     }
   }, [isModalOpen]);
 
-  // Tooltip Logic (unchanged)
   useEffect(() => {
     if (loading) return;
 
@@ -629,8 +627,8 @@ export default function Home() {
       const mouseY = e ? e.clientY : window.innerHeight / 2;
 
       let isOverSlide = false;
-      slidesRef.current.forEach((slide) => {
-        if (slide) {
+      slidesRef.current.forEach((slide, idx) => {
+        if (slide && idx === activeSlide) {
           const imageContainer = slide.querySelector('.cursor-pointer');
           if (imageContainer) {
             const rect = imageContainer.getBoundingClientRect();
@@ -659,7 +657,7 @@ export default function Home() {
     return () => {
       window.removeEventListener('mousemove', checkMouseOverSlide);
     };
-  }, [loading]);
+  }, [loading, activeSlide]);
 
   // Handle mouse move for tooltip (unchanged)
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -690,7 +688,7 @@ export default function Home() {
       )}
 
       {/* Main Content */}
-      <div className={`pb-[env(safe-area-inset-bottom)] min-h-screen bg-[#1A1A1A] text-white font-custom overflow-x-hidden ${loading ? 'opacity-0' : 'opacity-100'}`}>
+      <div className={`min-h-screen bg-[#1A1A1A] text-white font-custom overflow-x-hidden ${loading ? 'opacity-0' : 'opacity-100'}`}>
         {/* Canvas Background (unchanged) */}
         <CanvasManager />
 
@@ -714,77 +712,82 @@ export default function Home() {
               ref={(el) => {
                 if (el) slidesRef.current[index] = el;
               }}
-              className="min-h-[100vh] sm:h-screen flex items-center justify-center px-4 snap-start box-border sm:pb-0 pb-[env(safe-area-inset-bottom)]"
+              className="min-h-[100vh] snap-start"
             >
-              {/* Desktop Sidebar (Hidden on Mobile) */}
+              {/* Fixed Content Container */}
               <div
-                ref={sidebarRef}
-                className="hidden sm:block fixed top-1/2 left-6 transform -translate-y-1/2 z-20 opacity-0"
-              >
-                <h3 className="text-lg font-extralight text-white mb-3">
-                  Selected Works ({projects.length})
-                </h3>
-                <ul>
-                  {projects.map((proj, idx) => (
-                    <li key={proj.id} className="relative text-sm/7">
-                      <button
-                        onClick={() => handleNavClick(idx)}
-                        className={`selected-link relative inline-block text-sm font-extralight tracking-wide ${
-                          activeSlide === idx ? 'text-white' : 'text-gray-400'
-                        }`}
-                      >
-                        {proj.name}
-                        <span
-                          ref={(el) => {
-                            underlineRefs.current[idx] = el;
-                          }}
-                          className="absolute bottom-0 left-0 w-full h-[1px] bg-white transform scale-x-0 origin-left"
-                        />
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              {/* Skills Section (Hidden on Mobile) */}
-              <div
-                ref={skillsRef}
-                className="hidden sm:block fixed top-1/2 right-6 transform -translate-y-1/2 z-20 opacity-0"
-              >
-                <h3 className="text-lg font-extralight mb-3">
-                  Projects Launched
-                </h3>
-                <ul>
-                  {portfolioItems.map((portfolioItem, idx) => (
-                    <li key={idx} className="text-sm/7">
-                      <span className="text-sm font-extralight text-gray-400">{portfolioItem}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Slide Content */}
-              <div
-                ref={index === 0 ? heroRef : null}
-                className={`relative flex flex-col items-center justify-center w-full max-w-4xl p-8 z-10 ${index === 0 ? 'opacity-0 scale-[0.95]' : null}`}
+                className={`fixed top-0 left-0 w-full h-full flex items-center justify-center px-4 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] z-10 ${index === activeSlide ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                style={{ transition: 'opacity 0.3s ease' }}
               >
                 <div
-                  className="relative w-full h-[300px] sm:h-[500px] mb-6 cursor-pointer"
-                  onClick={() => openModal(project)}
-                  onMouseEnter={() => setTooltipVisible(true)}
-                  onMouseLeave={() => setTooltipVisible(false)}
-                  onMouseMove={handleMouseMove}
+                  ref={index === 0 ? heroRef : null}
+                  className={`relative flex flex-col items-center justify-center w-full max-w-4xl p-8 ${index === 0 ? 'opacity-0 scale-[0.95]' : ''}`}
                 >
-                  <Image
-                    src={project.image}
-                    alt={`${project.name} screenshot`}
-                    fill
-                    style={{ objectFit: 'cover', objectPosition: index === 5 || index === 4 ?  'center center' : 'left center' , opacity: 0.9 }} 
-                    priority
-                  />
+                  <div
+                    className="relative w-full h-[300px] sm:h-[500px] mb-6 cursor-pointer"
+                    onClick={() => openModal(project)}
+                    onMouseEnter={() => setTooltipVisible(true)}
+                    onMouseLeave={() => setTooltipVisible(false)}
+                    onMouseMove={handleMouseMove}
+                  >
+                    <Image
+                      src={project.image}
+                      alt={`${project.name} screenshot`}
+                      fill
+                      style={{ objectFit: 'cover', objectPosition: index === 5 || index === 4 ? 'center center' : 'left center', opacity: 0.9 }}
+                      priority
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Desktop Sidebar (Hidden on Mobile) */}
+        <div
+          ref={sidebarRef}
+          className="hidden sm:block fixed top-1/2 left-6 transform -translate-y-1/2 z-20 opacity-0"
+        >
+          <h3 className="text-lg font-extralight text-white mb-3">
+            Selected Works ({projects.length})
+          </h3>
+          <ul>
+            {projects.map((proj, idx) => (
+              <li key={proj.id} className="relative text-sm/7">
+                <button
+                  onClick={() => handleNavClick(idx)}
+                  className={`selected-link relative inline-block text-sm font-extralight tracking-wide ${
+                    activeSlide === idx ? 'text-white' : 'text-gray-400'
+                  }`}
+                >
+                  {proj.name}
+                  <span
+                    ref={(el) => {
+                      underlineRefs.current[idx] = el;
+                    }}
+                    className="absolute bottom-0 left-0 w-full h-[1px] bg-white transform scale-x-0 origin-left"
+                  />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        {/* Skills Section (Hidden on Mobile) */}
+        <div
+          ref={skillsRef}
+          className="hidden sm:block fixed top-1/2 right-6 transform -translate-y-1/2 z-20 opacity-0"
+        >
+          <h3 className="text-lg font-extralight mb-3">
+            Projects Launched
+          </h3>
+          <ul>
+            {portfolioItems.map((portfolioItem, idx) => (
+              <li key={idx} className="text-sm/7">
+                <span className="text-sm font-extralight text-gray-400">{portfolioItem}</span>
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* Modal */}
@@ -851,7 +854,7 @@ export default function Home() {
                         <Image
                           src={img}
                           alt={`${selectedProject.name} screenshot ${idx + 1}`}
-                          style={{ objectPosition: 'center center' }} 
+                          style={{ objectPosition: 'center center' }}
                           fill
                           className="object-cover opacity-95 transition duration-500"
                         />
@@ -897,7 +900,7 @@ export default function Home() {
         {/* Footer */}
         <footer
           ref={footerRef}
-          className="fixed bottom-6 left-6 right-6 flex flex-col sm:flex-row justify-between text-gray-400 text-xs z-20 space-y-6 sm:space-y-0"
+          className="fixed bottom-6 left-6 right-6 flex flex-col sm:flex-row justify-between text-gray-400 text-xs z-20 space-y-6 sm:space-y-0 pb-[env(safe-area-inset-bottom)]"
         >
           <div ref={footerLeftRef} className="flex flex-col space-y-2 opacity-0">
             <div>
