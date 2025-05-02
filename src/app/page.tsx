@@ -690,7 +690,7 @@ export default function Home() {
       )}
 
       {/* Main Content */}
-      <div className={`max-sm:fixed max-sm:left-0 max-sm:right-0 min-h-screen bg-[#1A1A1A] text-white font-custom overflow-x-hidden ${loading ? 'opacity-0' : 'opacity-100'}`}>
+      <div className={`max-sm:fixed max-sm:bottom-0 max-sm:top-0 max-sm:left-0 max-sm:right-0 min-h-screen bg-[#1A1A1A] text-white font-custom overflow-x-hidden ${loading ? 'opacity-0' : 'opacity-100'}`}>
         {/* Canvas Background (unchanged) */}
         <CanvasManager />
 
