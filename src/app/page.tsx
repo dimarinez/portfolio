@@ -583,7 +583,7 @@ export default function Home() {
           y: 0,
           duration: 0.6,
           stagger: 0.2,
-          ease: Power3.easeOut, // Fixed typo from "Power3.ease Hildegard"
+          ease: Power3.easeOut,
           scrollTrigger: {
             scroller: scroller,
             trigger: ctaButton,
@@ -690,7 +690,7 @@ export default function Home() {
       )}
 
       {/* Main Content */}
-      <div className={`max-sm:fixed max-sm:bottom-0 max-sm:top-0 max-sm:left-0 max-sm:right-0 min-h-screen bg-[#1A1A1A] text-white font-custom overflow-x-hidden ${loading ? 'opacity-0' : 'opacity-100'}`}>
+      <div className={`min-h-screen bg-[#1A1A1A] text-white font-custom overflow-x-hidden ${loading ? 'opacity-0' : 'opacity-100'}`}>
         {/* Canvas Background (unchanged) */}
         <CanvasManager />
 
@@ -714,7 +714,7 @@ export default function Home() {
               ref={(el) => {
                 if (el) slidesRef.current[index] = el;
               }}
-              className="h-screen flex items-center justify-center px-4 snap-start"
+              className="min-h-[100vh] sm:h-screen flex items-center justify-center px-4 snap-start box-border sm:pb-0 pb-[env(safe-area-inset-bottom)]"
             >
               {/* Desktop Sidebar (Hidden on Mobile) */}
               <div
