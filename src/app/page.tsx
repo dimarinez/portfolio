@@ -84,7 +84,7 @@ export default function Home() {
       ],
       contributions: [
         'Developed responsive PDPs and PLPs',
-        'Optimized navigation with mega-menus',
+        'Optimized navigation with a mega-menu',
         'Guided third-party vendors for seamless integration',
       ],
     },
