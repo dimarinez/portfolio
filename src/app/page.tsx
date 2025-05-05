@@ -926,6 +926,10 @@ export default function Home() {
             <div ref={footerRightRef} className="flex flex-col justify-end space-y-2 opacity-0 sm:order-2">
               <h4 className="text-xs font-extralight text-gray-400 mb-1">Social Media</h4>
               <div className="flex space-x-4">
+                <Link href="https://github.com/dimarinez/" className="text-xs font-extralight text-white relative group">
+                  Github
+                  <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-gray-400 transition-all duration-300 group-hover:w-full" />
+                </Link>
                 <Link href="https://instagram.com/dillonmarinez" className="text-xs font-extralight text-white relative group">
                   Instagram
                   <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-gray-400 transition-all duration-300 group-hover:w-full" />
