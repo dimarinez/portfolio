@@ -734,9 +734,19 @@ export default function Home() {
                       src={project.image}
                       alt={`${project.name} screenshot`}
                       fill
-                      style={{ objectFit: 'cover', objectPosition: index === 5 || index === 4 ? 'center center' : 'left center', opacity: 0.9 }}
+                      style={{
+                        objectFit: 'cover',
+                        objectPosition: index === 5 || index === 4 ? 'center center' : 'left center',
+                        opacity: 0.9,
+                      }}
                       priority
                     />
+                    {/* Mobile Overlay */}
+                    <div
+                      className="absolute inset-0 bg-black opacity-30 flex items-center justify-center text-white text-lg font-semibold sm:hidden"
+                    >
+                      View Case Study
+                    </div>
                   </div>
                 </div>
               </div>
