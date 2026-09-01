@@ -20,6 +20,8 @@ export default function CanvasManager() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     // Scene Setup
     const scene = sceneRef.current;
     scene.background = null;
@@ -51,7 +53,7 @@ export default function CanvasManager() {
     scene.add(torus);
 
     // Particles
-    const particleCount = 300;
+    const particleCount = 240;
     const particleGeometry = new THREE.BufferGeometry();
     const posArray = new Float32Array(particleCount * 3);
     const velocities = new Float32Array(particleCount * 3);
@@ -70,10 +72,11 @@ export default function CanvasManager() {
     particleGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     const particleMaterial = new THREE.PointsMaterial({
-      size: 0.04, // Increased size
+      size: 0.045,
       transparent: true,
       vertexColors: true,
       blending: THREE.AdditiveBlending,
+      opacity: 0.72,
     });
     const particles = new THREE.Points(particleGeometry, particleMaterial);
     particlesRef.current = particles;
@@ -96,12 +99,12 @@ export default function CanvasManager() {
       const scrollFraction = Math.min(scrollTop / docHeight, 1);
       scrollProgress.current = scrollFraction;
 
-      if (torusRef.current) {
+      if (torusRef.current && !reducedMotion) {
         const scale = 1 + scrollFraction * 2;
         torusRef.current.scale.set(scale, scale, scale);
       }
 
-      if (particlesRef.current) {
+      if (particlesRef.current && !reducedMotion) {
         const positions = particlesRef.current.geometry.attributes.position.array as Float32Array;
         const material = particlesRef.current.material as THREE.PointsMaterial;
         for (let i = 0; i < particleCount * 3; i += 3) {
@@ -171,10 +174,10 @@ export default function CanvasManager() {
           positions[i + 2] += velocities[i + 2] * delta * 60;
         }
         particlesRef.current.geometry.attributes.position.needsUpdate = true;
-        material.opacity = 1 - scrollProgress.current * 0.5;
+        material.opacity = 0.72 - scrollProgress.current * 0.3;
 
         // Optional: Pulse particle size for visibility (comment out if not desired)
-        material.size = 0.08 + Math.sin(time * 0.002) * 0.02;
+        material.size = 0.055 + Math.sin(time * 0.002) * 0.012;
       }
 
       renderer.render(scene, camera);
@@ -196,6 +199,9 @@ export default function CanvasManager() {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      handleMouseMove.cancel();
+      handleScroll.cancel();
+      handleResize.cancel();
       cancelAnimationFrame(animationFrameId);
 
       // Dispose Three.js resources
@@ -221,7 +227,8 @@ export default function CanvasManager() {
   return (
     <canvas
       ref={canvasRef}
-      className="fixed top-0 left-0 w-full h-full z-1"
+      aria-hidden="true"
+      className="pointer-events-none fixed left-0 top-0 z-[1] h-full w-full opacity-80"
       style={{ background: 'transparent' }}
     />
   );
