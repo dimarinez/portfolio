@@ -1,7 +1,24 @@
 'use client';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import throttle from 'lodash.throttle';
+
+type MotionPermission = 'unavailable' | 'prompt' | 'active' | 'denied';
+
+type DeviceOrientationPermissionConstructor = typeof DeviceOrientationEvent & {
+  requestPermission?: () => Promise<'granted' | 'denied'>;
+};
+
+function getScreenRelativeTilt(beta: number, gamma: number) {
+  const legacyAngle = (window as Window & { orientation?: number }).orientation ?? 0;
+  const angle = window.screen.orientation?.angle ?? legacyAngle;
+  const normalizedAngle = ((angle % 360) + 360) % 360;
+
+  if (normalizedAngle === 90) return { x: beta, y: -gamma };
+  if (normalizedAngle === 180) return { x: -gamma, y: -beta };
+  if (normalizedAngle === 270) return { x: -beta, y: gamma };
+  return { x: gamma, y: beta };
+}
 
 export default function CanvasManager() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -11,11 +28,61 @@ export default function CanvasManager() {
   const torusRef = useRef<THREE.Mesh | null>(null);
   const particlesRef = useRef<THREE.Points | null>(null);
   const mouse = useRef({ x: 0, y: 0 });
+  const interaction = useRef({ x: 0, y: 0 });
+  const motionTarget = useRef({ active: false, x: 0, y: 0 });
+  const motionBaseline = useRef<{ x: number; y: number } | null>(null);
   const burstRef = useRef({ active: false, time: 0 });
   const spinRef = useRef({ active: false, time: 0, spinSpeed: 0 });
   const scrollProgress = useRef(0);
   const isVisible = useRef(true);
   const lastTime = useRef(0);
+  const [motionPermission, setMotionPermission] = useState<MotionPermission>('unavailable');
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const mobilePointer = window.matchMedia('(pointer: coarse)').matches;
+    if (reducedMotion || !mobilePointer || !('DeviceOrientationEvent' in window)) return;
+
+    const orientationEvent = DeviceOrientationEvent as DeviceOrientationPermissionConstructor;
+    setMotionPermission(typeof orientationEvent.requestPermission === 'function' ? 'prompt' : 'active');
+  }, []);
+
+  useEffect(() => {
+    if (motionPermission !== 'active') return;
+
+    const handleDeviceOrientation = (event: DeviceOrientationEvent) => {
+      if (event.beta === null || event.gamma === null) return;
+
+      const tilt = getScreenRelativeTilt(event.beta, event.gamma);
+      if (!motionBaseline.current) {
+        motionBaseline.current = tilt;
+        motionTarget.current.active = true;
+        return;
+      }
+
+      const range = 24;
+      motionTarget.current.active = true;
+      motionTarget.current.x = THREE.MathUtils.clamp((tilt.x - motionBaseline.current.x) / range, -1, 1);
+      motionTarget.current.y = THREE.MathUtils.clamp((tilt.y - motionBaseline.current.y) / range, -1, 1);
+    };
+
+    window.addEventListener('deviceorientation', handleDeviceOrientation, true);
+    return () => {
+      window.removeEventListener('deviceorientation', handleDeviceOrientation, true);
+      motionTarget.current = { active: false, x: 0, y: 0 };
+      motionBaseline.current = null;
+    };
+  }, [motionPermission]);
+
+  const requestMotionAccess = async () => {
+    const orientationEvent = DeviceOrientationEvent as DeviceOrientationPermissionConstructor;
+    try {
+      const result = await orientationEvent.requestPermission?.();
+      setMotionPermission(result === 'granted' ? 'active' : 'denied');
+    } catch {
+      setMotionPermission('denied');
+    }
+  };
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -136,9 +203,17 @@ export default function CanvasManager() {
       const delta = (time - lastTime.current) / 1000;
       lastTime.current = time;
 
+      const usingMotion = motionTarget.current.active;
+      const targetX = usingMotion ? motionTarget.current.x : mouse.current.x;
+      const targetY = usingMotion ? motionTarget.current.y : mouse.current.y;
+      const follow = 1 - Math.exp(-delta * (usingMotion ? 7 : 11));
+      interaction.current.x += (targetX - interaction.current.x) * follow;
+      interaction.current.y += (targetY - interaction.current.y) * follow;
+
       if (torusRef.current) {
-        torusRef.current.rotation.x = mouse.current.y * Math.PI * 0.5;
-        torusRef.current.rotation.y = mouse.current.x * Math.PI * 0.5;
+        const rotationRange = Math.PI * (usingMotion ? 0.34 : 0.5);
+        torusRef.current.rotation.x = interaction.current.y * rotationRange;
+        torusRef.current.rotation.y = interaction.current.x * rotationRange;
         if (spinRef.current.active) {
           spinRef.current.time += delta;
           torusRef.current.rotation.x += spinRef.current.spinSpeed * delta * 60;
@@ -175,6 +250,13 @@ export default function CanvasManager() {
         }
         particlesRef.current.geometry.attributes.position.needsUpdate = true;
         material.opacity = 0.72 - scrollProgress.current * 0.3;
+
+        const particleTiltX = usingMotion ? interaction.current.y * 0.12 : 0;
+        const particleTiltY = usingMotion ? interaction.current.x * 0.18 : 0;
+        particlesRef.current.rotation.x += (particleTiltX - particlesRef.current.rotation.x) * follow;
+        particlesRef.current.rotation.y += (particleTiltY - particlesRef.current.rotation.y) * follow;
+        particlesRef.current.position.x += ((usingMotion ? interaction.current.x * 0.18 : 0) - particlesRef.current.position.x) * follow;
+        particlesRef.current.position.y += ((usingMotion ? interaction.current.y * 0.12 : 0) - particlesRef.current.position.y) * follow;
 
         // Optional: Pulse particle size for visibility (comment out if not desired)
         material.size = 0.055 + Math.sin(time * 0.002) * 0.012;
@@ -225,11 +307,22 @@ export default function CanvasManager() {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden="true"
-      className="pointer-events-none fixed left-0 top-0 z-[1] h-full w-full opacity-80"
-      style={{ background: 'transparent' }}
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        aria-hidden="true"
+        className="pointer-events-none fixed left-0 top-0 z-[1] h-full w-full opacity-80"
+        style={{ background: 'transparent' }}
+      />
+      {motionPermission === 'prompt' && (
+        <button
+          type="button"
+          onClick={requestMotionAccess}
+          className="fixed bottom-[calc(5.5rem+env(safe-area-inset-bottom))] left-1/2 z-[35] flex min-h-11 -translate-x-1/2 items-center whitespace-nowrap rounded-full border border-white/15 bg-black/25 px-4 font-mono text-[8px] uppercase tracking-[0.2em] text-white/55 backdrop-blur-md transition hover:border-white/35 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8fffe8] sm:hidden"
+        >
+          Enable tilt
+        </button>
+      )}
+    </>
   );
 }
