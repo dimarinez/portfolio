@@ -474,14 +474,7 @@ export default function Home() {
           ))}
         </main>
 
-        <div className="pointer-events-none fixed inset-x-6 bottom-[calc(1.5rem+env(safe-area-inset-bottom))] z-30 flex items-end justify-between gap-6 sm:bottom-5">
-          <button
-            type="button"
-            onClick={() => setProfileOpen(true)}
-            className="pointer-events-auto flex min-h-11 shrink-0 items-center whitespace-nowrap text-left text-[10px] uppercase tracking-[0.18em] text-white/55 transition hover:text-white lg:hidden"
-          >
-            <span className="hidden min-[360px]:inline">10+ years / </span>Profile
-          </button>
+        <div className="pointer-events-none fixed inset-x-6 bottom-[calc(1.5rem+env(safe-area-inset-bottom))] z-30 flex items-end justify-end gap-6 sm:bottom-5 lg:justify-between">
           <div className="hidden max-w-xs text-xs font-extralight leading-relaxed text-white/45 lg:block">
             Commerce platforms, digital products, and systems built for real-world complexity.
           </div>

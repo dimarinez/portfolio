@@ -43,8 +43,7 @@ export default function CanvasManager() {
     const mobilePointer = window.matchMedia('(pointer: coarse)').matches;
     if (reducedMotion || !mobilePointer || !('DeviceOrientationEvent' in window)) return;
 
-    const orientationEvent = DeviceOrientationEvent as DeviceOrientationPermissionConstructor;
-    setMotionPermission(typeof orientationEvent.requestPermission === 'function' ? 'prompt' : 'active');
+    setMotionPermission('prompt');
   }, []);
 
   useEffect(() => {
@@ -77,8 +76,13 @@ export default function CanvasManager() {
   const requestMotionAccess = async () => {
     const orientationEvent = DeviceOrientationEvent as DeviceOrientationPermissionConstructor;
     try {
-      const result = await orientationEvent.requestPermission?.();
-      setMotionPermission(result === 'granted' ? 'active' : 'denied');
+      if (typeof orientationEvent.requestPermission === 'function') {
+        const result = await orientationEvent.requestPermission();
+        setMotionPermission(result === 'granted' ? 'active' : 'denied');
+        return;
+      }
+
+      setMotionPermission('active');
     } catch {
       setMotionPermission('denied');
     }
@@ -315,13 +319,35 @@ export default function CanvasManager() {
         style={{ background: 'transparent' }}
       />
       {motionPermission === 'prompt' && (
-        <button
-          type="button"
-          onClick={requestMotionAccess}
-          className="fixed bottom-[calc(5.5rem+env(safe-area-inset-bottom))] left-1/2 z-[35] flex min-h-11 -translate-x-1/2 items-center whitespace-nowrap rounded-full border border-white/15 bg-black/25 px-4 font-mono text-[8px] uppercase tracking-[0.2em] text-white/55 backdrop-blur-md transition hover:border-white/35 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8fffe8] sm:hidden"
+        <div
+          role="dialog"
+          aria-labelledby="motion-prompt-title"
+          className="fixed inset-x-6 bottom-[calc(5.75rem+env(safe-area-inset-bottom))] z-[35] mx-auto max-w-sm border border-white/15 bg-[#171717]/92 p-5 text-white shadow-2xl backdrop-blur-xl sm:hidden"
         >
-          Enable tilt
-        </button>
+          <p className="font-mono text-[8px] uppercase tracking-[0.22em] text-[#8fffe8]">Motion interaction</p>
+          <p id="motion-prompt-title" className="mt-2 text-xl font-extralight leading-tight tracking-[-0.025em]">
+            Move the scene with your phone.
+          </p>
+          <p className="mt-2 max-w-xs text-xs font-extralight leading-relaxed text-white/45">
+            Enable tilt to give the background depth as you move.
+          </p>
+          <div className="mt-5 flex items-center gap-6">
+            <button
+              type="button"
+              onClick={requestMotionAccess}
+              className="flex min-h-11 items-center border-b border-[#8fffe8] font-mono text-[9px] uppercase tracking-[0.18em] text-[#8fffe8] transition hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8fffe8]"
+            >
+              Enable tilt ↗
+            </button>
+            <button
+              type="button"
+              onClick={() => setMotionPermission('denied')}
+              className="flex min-h-11 items-center font-mono text-[9px] uppercase tracking-[0.18em] text-white/40 transition hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8fffe8]"
+            >
+              Not now
+            </button>
+          </div>
+        </div>
       )}
     </>
   );
