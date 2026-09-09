@@ -118,6 +118,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                 src={src}
                 alt={`${project.name} interface view ${index + 1}`}
                 fill
+                quality={95}
                 sizes="(max-width: 768px) 100vw, 1400px"
                 className="object-cover"
               />
@@ -475,6 +476,7 @@ export default function Home() {
                     alt={`${project.name} featured interface`}
                     fill
                     priority={index < 2}
+                    quality={92}
                     sizes="(max-width: 640px) 100vw, 1024px"
                     className="object-cover opacity-90 transition duration-1000 ease-out group-hover:scale-[1.025] group-hover:opacity-100"
                     style={{ objectPosition: index >= 4 ? 'center' : 'left center' }}

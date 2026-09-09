@@ -203,9 +203,10 @@ export const projects: Project[] = [
     galleryImages: [
       '/projects/there-is-a-light/hero.jpg',
       '/projects/there-is-a-light/mission.jpg',
-      '/projects/there-is-a-light/impact.jpg',
-      '/projects/there-is-a-light/application-hero.jpg',
-      '/projects/there-is-a-light/application-form.jpg',
+      '/projects/there-is-a-light/impact-feature.jpg',
+      '/projects/there-is-a-light/scholar-story.jpg',
+      '/projects/there-is-a-light/scholar-archive.jpg',
+      '/projects/there-is-a-light/grant-process.jpg',
     ],
     contributions: [
       'Designed and built the responsive Next.js experience and a custom Payload CMS publishing workflow',
