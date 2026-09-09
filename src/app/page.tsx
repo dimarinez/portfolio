@@ -14,13 +14,26 @@ import {
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
-function CloseButton({ onClick, label }: { onClick: () => void; label: string }) {
+function CloseButton({
+  onClick,
+  label,
+  onLight = false,
+}: {
+  onClick: () => void;
+  label: string;
+  onLight?: boolean;
+}) {
   return (
     <button
       type="button"
       onClick={onClick}
+      autoFocus
       aria-label={label}
-      className="group fixed right-4 top-4 z-[70] grid h-12 w-12 place-items-center rounded-full border border-white/15 bg-black/20 text-white backdrop-blur-md transition hover:border-white/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8fffe8] sm:right-7 sm:top-7"
+      className={`group fixed right-4 top-4 z-[70] grid h-12 w-12 place-items-center rounded-full border backdrop-blur-md transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8fffe8] sm:right-7 sm:top-7 ${
+        onLight
+          ? 'border-black/20 bg-black/10 text-black hover:border-black/55'
+          : 'border-white/20 bg-black/35 text-white hover:border-white/60'
+      }`}
     >
       <span className="absolute h-px w-5 rotate-45 bg-current transition-transform duration-500 group-hover:rotate-[135deg]" />
       <span className="absolute h-px w-5 -rotate-45 bg-current transition-transform duration-500 group-hover:rotate-45" />
@@ -38,7 +51,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.45, ease }}
-      className="fixed inset-0 z-[60] overflow-y-auto bg-[#101010]/98 text-white"
+      className="fixed inset-0 z-[60] overflow-y-auto bg-[#101010] text-white"
     >
       <CloseButton onClick={onClose} label={`Close ${project.name} case study`} />
 
@@ -48,7 +61,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8, ease }}
         >
-          <div className="mb-7 flex items-center justify-between border-b border-white/15 pb-4 font-mono text-[10px] uppercase tracking-[0.22em] text-white/50 sm:text-xs">
+          <div className="mb-7 flex items-center justify-between border-b border-white/15 pb-4 font-mono text-[10px] uppercase tracking-[0.22em] text-white/70 sm:text-xs">
             <span>Case {project.index}</span>
             <span>{project.year}</span>
           </div>
@@ -62,7 +75,7 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
 
           <div className="mt-12 grid gap-10 lg:grid-cols-[1.25fr_0.75fr] lg:gap-20">
             <div>
-              <p className="max-w-3xl text-xl font-extralight leading-relaxed text-white/72 sm:text-3xl">
+              <p className="max-w-3xl text-xl font-extralight leading-relaxed text-white/80 sm:text-3xl">
                 {project.overview}
               </p>
               <p className="mt-10 max-w-3xl text-2xl font-extralight leading-snug text-[#a6ffed] sm:text-4xl">
@@ -72,22 +85,22 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
 
             <dl className="grid content-start gap-6 border-l border-white/15 pl-5 sm:grid-cols-2 lg:grid-cols-1 lg:pl-8">
               <div>
-                <dt className="text-[10px] uppercase tracking-[0.22em] text-white/40">Role</dt>
+                <dt className="text-[10px] uppercase tracking-[0.22em] text-white/60">Role</dt>
                 <dd className="mt-2 text-sm text-white/90">{project.role}</dd>
               </div>
               <div>
-                <dt className="text-[10px] uppercase tracking-[0.22em] text-white/40">Context</dt>
+                <dt className="text-[10px] uppercase tracking-[0.22em] text-white/60">Context</dt>
                 <dd className="mt-2 text-sm text-white/90">{project.context}</dd>
               </div>
               <div>
-                <dt className="text-[10px] uppercase tracking-[0.22em] text-white/40">Stack</dt>
+                <dt className="text-[10px] uppercase tracking-[0.22em] text-white/60">Stack</dt>
                 <dd className="mt-2 text-sm leading-relaxed text-white/90">
                   {project.stack.join(' / ')}
                 </dd>
               </div>
               {project.url && (
                 <div>
-                  <dt className="text-[10px] uppercase tracking-[0.22em] text-white/40">Live</dt>
+                  <dt className="text-[10px] uppercase tracking-[0.22em] text-white/60">Live</dt>
                   <dd className="mt-2 text-sm text-white/90">
                     <a
                       href={project.url}
@@ -132,12 +145,12 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
         <div className="mt-20 grid gap-12 border-t border-white/15 pt-10 sm:mt-28 lg:grid-cols-[0.7fr_1.3fr] lg:gap-20">
           <div>
             <p className="text-xs uppercase tracking-[0.24em] text-[#8fffe8]">Selected contribution</p>
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/45">{project.credit}</p>
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/65">{project.credit}</p>
           </div>
           <ol className="space-y-8">
             {project.contributions.map((contribution, index) => (
               <li key={contribution} className="grid grid-cols-[2.5rem_1fr] gap-3 border-b border-white/10 pb-8">
-                <span className="font-mono text-xs text-white/35">0{index + 1}</span>
+                <span className="font-mono text-xs text-white/55">0{index + 1}</span>
                 <span className="text-xl font-extralight leading-snug sm:text-3xl">{contribution}</span>
               </li>
             ))}
@@ -175,10 +188,10 @@ function ProfileModal({ onClose }: { onClose: () => void }) {
       transition={{ duration: 0.45, ease }}
       className="fixed inset-0 z-[60] overflow-y-auto bg-[#e8fffa] text-[#111]"
     >
-      <CloseButton onClick={onClose} label="Close profile" />
+      <CloseButton onClick={onClose} label="Close profile" onLight />
 
       <div className="mx-auto max-w-[1500px] px-5 pb-20 pt-24 sm:px-10 sm:pt-28 lg:px-16">
-        <div className="border-b border-black/20 pb-5 font-mono text-[10px] uppercase tracking-[0.22em] text-black/55 sm:text-xs">
+        <div className="border-b border-black/20 pb-5 font-mono text-[10px] uppercase tracking-[0.22em] text-black/65 sm:text-xs">
           Profile / California + Miami / 2026
         </div>
 
@@ -191,36 +204,36 @@ function ProfileModal({ onClose }: { onClose: () => void }) {
         >
           Engineer by discipline.
           <br />
-          <span className="text-black/28">Creative by instinct.</span>
+          <span className="text-black/36">Creative by instinct.</span>
         </motion.h2>
 
         <div className="mt-16 grid grid-cols-2 border-y border-black/20 sm:grid-cols-4">
           {proofPoints.map((point) => (
             <div key={point.label} className="border-black/20 px-3 py-7 odd:border-r sm:border-r sm:last:border-r-0 sm:px-6">
               <div className="text-4xl font-extralight tracking-[-0.05em] sm:text-6xl">{point.value}</div>
-              <div className="mt-2 text-[10px] uppercase tracking-[0.18em] text-black/45">{point.label}</div>
+              <div className="mt-2 text-[10px] uppercase tracking-[0.18em] text-black/65">{point.label}</div>
             </div>
           ))}
         </div>
 
         <div className="mt-20 grid gap-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-24">
-          <div className="text-xs uppercase tracking-[0.22em] text-black/45">About</div>
+          <div className="text-xs uppercase tracking-[0.22em] text-black/65">About</div>
           <div>
             <p className="max-w-4xl text-2xl font-extralight leading-snug sm:text-4xl">
               Senior software engineer and technical lead with 10+ years building commerce platforms, internal tools, mobile applications, and digital products for major brands and growing organizations.
             </p>
-            <p className="mt-8 max-w-3xl text-base leading-relaxed text-black/58 sm:text-lg">
+            <p className="mt-8 max-w-3xl text-base leading-relaxed text-black/70 sm:text-lg">
               I work across product thinking, frontend architecture, CMS platforms, APIs, performance, and delivery—turning complicated requirements into software that feels straightforward to use and maintain.
             </p>
           </div>
         </div>
 
         <div className="mt-20 grid gap-12 border-t border-black/20 pt-10 lg:grid-cols-[0.7fr_1.3fr] lg:gap-24">
-          <div className="text-xs uppercase tracking-[0.22em] text-black/45">Capabilities</div>
+          <div className="text-xs uppercase tracking-[0.22em] text-black/65">Capabilities</div>
           <ul className="grid sm:grid-cols-2">
             {capabilities.map((capability, index) => (
               <li key={capability} className="flex items-center gap-5 border-b border-black/15 py-5 text-xl font-extralight sm:text-2xl">
-                <span className="font-mono text-[10px] text-black/35">0{index + 1}</span>
+                <span className="font-mono text-[10px] text-black/55">0{index + 1}</span>
                 {capability}
               </li>
             ))}
@@ -228,28 +241,28 @@ function ProfileModal({ onClose }: { onClose: () => void }) {
         </div>
 
         <div className="mt-20 grid gap-12 border-t border-black/20 pt-10 lg:grid-cols-[0.7fr_1.3fr] lg:gap-24">
-          <div className="text-xs uppercase tracking-[0.22em] text-black/45">Selected experience</div>
+          <div className="text-xs uppercase tracking-[0.22em] text-black/65">Selected experience</div>
           <div>
             {experience.map((item) => (
               <div key={`${item.company}-${item.years}`} className="grid gap-2 border-b border-black/15 py-6 sm:grid-cols-[7rem_1fr_1fr] sm:gap-6">
-                <span className="font-mono text-[10px] tracking-[0.12em] text-black/38">{item.years}</span>
+                <span className="font-mono text-[10px] tracking-[0.12em] text-black/58">{item.years}</span>
                 <div>
                   <div className="text-lg">{item.company}</div>
-                  <div className="mt-1 text-sm text-black/48">{item.role}</div>
+                  <div className="mt-1 text-sm text-black/65">{item.role}</div>
                 </div>
-                <div className="text-sm leading-relaxed text-black/55">{item.focus}</div>
+                <div className="text-sm leading-relaxed text-black/68">{item.focus}</div>
               </div>
             ))}
           </div>
         </div>
 
         <div className="mt-20 grid gap-12 border-t border-black/20 pt-10 lg:grid-cols-[0.7fr_1.3fr] lg:gap-24">
-          <div className="text-xs uppercase tracking-[0.22em] text-black/45">Independent practice</div>
+          <div className="text-xs uppercase tracking-[0.22em] text-black/65">Independent practice</div>
           <div>
             <p className="max-w-4xl text-2xl font-extralight leading-snug sm:text-4xl">
               Principal Consultant at Evara Group LLC, established 2025.
             </p>
-            <p className="mt-6 max-w-2xl text-sm leading-relaxed text-black/55 sm:text-base">
+            <p className="mt-6 max-w-2xl text-sm leading-relaxed text-black/68 sm:text-base">
               Independent consulting engagements, contracts, and payments are handled through Evara Group LLC.
             </p>
           </div>
@@ -262,6 +275,14 @@ function ProfileModal({ onClose }: { onClose: () => void }) {
             worth remembering.
           </p>
           <div className="flex flex-col items-start gap-3 text-sm">
+            <a
+              className="group mb-2 inline-flex items-center gap-3 border-b border-black pb-1 font-medium"
+              href="/Dillon_Marinez_Resume_2026.pdf"
+              download
+            >
+              Download résumé
+              <span aria-hidden="true" className="transition-transform duration-300 group-hover:translate-y-0.5">↓</span>
+            </a>
             <a className="border-b border-black pb-1" href="mailto:dillonmarinez@gmail.com">dillonmarinez@gmail.com</a>
             <a href="https://www.linkedin.com/in/dillon-marinez-9810b6114/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
             <a href="https://github.com/dimarinez/" target="_blank" rel="noreferrer">GitHub ↗</a>
@@ -378,10 +399,13 @@ export default function Home() {
         <header className="pointer-events-none fixed inset-x-0 top-0 z-30 flex items-start justify-between px-4 pt-4 sm:px-6 sm:pt-5">
           <div className="pointer-events-auto text-left">
             <h1 className="text-[30px] font-extralight leading-none tracking-[-0.05em] lg:text-[52px]">Dillon Marinez</h1>
+            <p className="mt-1 text-[10px] leading-tight tracking-[0.04em] text-white/70 lg:hidden">
+              Software engineer / creative technologist
+            </p>
             <button
               type="button"
               onClick={() => scrollToProject(0)}
-              className="mt-2 hidden font-mono text-[9px] uppercase tracking-[0.22em] text-white/42 transition hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8fffe8] lg:block"
+              className="mt-2 hidden font-mono text-[9px] uppercase tracking-[0.22em] text-white/60 transition hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8fffe8] lg:block"
             >
               California + Miami / Available for select projects
             </button>
@@ -391,7 +415,7 @@ export default function Home() {
             <button
               type="button"
               onClick={() => setProfileOpen(true)}
-              className="group text-right text-[10px] uppercase tracking-[0.2em] text-white/65 transition hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8fffe8] sm:text-xs"
+              className="group text-right text-[10px] uppercase tracking-[0.2em] text-white/80 transition hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8fffe8] sm:text-xs"
             >
               <span className="block">Profile</span>
               <span className="mt-1 hidden h-px w-full origin-right scale-x-0 bg-[#8fffe8] transition-transform duration-300 group-hover:scale-x-100 sm:block" />
@@ -405,12 +429,12 @@ export default function Home() {
         </header>
 
         <nav aria-label="Selected work" className="fixed left-6 top-1/2 z-30 hidden -translate-y-1/2 lg:block">
-          <p className="mb-4 font-mono text-[9px] uppercase tracking-[0.22em] text-white/36">Selected work</p>
+          <p className="mb-4 font-mono text-[9px] uppercase tracking-[0.22em] text-white/58">Selected work</p>
           <ol className="space-y-2.5">
             {projects.map((project, index) => (
               <li key={project.id}>
                 {(index === 0 || project.category !== projects[index - 1].category) && (
-                  <p className={`${index === 0 ? 'mb-2' : 'mb-2 mt-5'} font-mono text-[8px] uppercase tracking-[0.2em] text-[#8fffe8]/65`}>
+                  <p className={`${index === 0 ? 'mb-2' : 'mb-2 mt-5'} font-mono text-[9px] uppercase tracking-[0.18em] text-[#8fffe8]/85`}>
                     {project.category}
                   </p>
                 )}
@@ -418,9 +442,9 @@ export default function Home() {
                   type="button"
                   onClick={() => scrollToProject(index)}
                   aria-current={activeSlide === index ? 'true' : undefined}
-                  className={`group flex items-center gap-3 text-left text-sm font-extralight transition ${activeSlide === index ? 'text-white' : 'text-white/35 hover:text-white/70'}`}
+                  className={`group flex max-w-[11rem] items-start gap-3 text-left text-xs font-extralight leading-snug transition ${activeSlide === index ? 'text-white' : 'text-white/55 hover:text-white/80'}`}
                 >
-                  <span className={`h-px transition-all duration-500 ${activeSlide === index ? 'w-6 bg-[#8fffe8]' : 'w-2 bg-white/25 group-hover:w-4'}`} />
+                  <span className={`mt-[0.45rem] h-px shrink-0 transition-all duration-500 ${activeSlide === index ? 'w-6 bg-[#8fffe8]' : 'w-2 bg-white/40 group-hover:w-4'}`} />
                   {project.name}
                 </button>
               </li>
@@ -429,11 +453,11 @@ export default function Home() {
         </nav>
 
         <aside className="fixed right-6 top-1/2 z-30 hidden -translate-y-1/2 text-right lg:block">
-          <p className="mb-4 font-mono text-[9px] uppercase tracking-[0.22em] text-white/36">Proof in practice</p>
+          <p className="mb-4 font-mono text-[9px] uppercase tracking-[0.22em] text-white/58">Proof in practice</p>
           <div className="space-y-3">
-            <p><span className="text-2xl font-extralight">10+</span><span className="ml-2 text-xs text-white/38">years</span></p>
-            <p><span className="text-2xl font-extralight">15+</span><span className="ml-2 text-xs text-white/38">commerce launches</span></p>
-            <p><span className="text-2xl font-extralight">4</span><span className="ml-2 text-xs text-white/38">published apps</span></p>
+            <p><span className="text-2xl font-extralight">10+</span><span className="ml-2 text-xs text-white/58">years</span></p>
+            <p><span className="text-2xl font-extralight">15+</span><span className="ml-2 text-xs text-white/58">commerce launches</span></p>
+            <p><span className="text-2xl font-extralight">4</span><span className="ml-2 text-xs text-white/58">published apps</span></p>
             <p className="text-[10px] uppercase tracking-[0.17em] text-[#8fffe8]">Salesforce certified</p>
           </div>
         </aside>
@@ -456,10 +480,10 @@ export default function Home() {
               >
                 <div className="mb-4 flex items-end justify-between sm:mb-5">
                   <div>
-                    <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#8fffe8]">{project.category} / Case {project.index} / {project.year}</p>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#8fffe8]">{project.category} / Case {project.index} / {project.year}</p>
                     <h2 className="mt-2 text-[clamp(2rem,5vw,4.8rem)] font-extralight leading-none tracking-[-0.055em]">{project.name}</h2>
                   </div>
-                  <p className="hidden max-w-[18rem] text-right text-xs leading-relaxed text-white/42 sm:block">{project.role}<br />{project.context}</p>
+                  <p className="hidden max-w-[18rem] text-right text-xs leading-relaxed text-white/62 sm:block">{project.role}<br />{project.context}</p>
                 </div>
 
                 <button
@@ -482,14 +506,14 @@ export default function Home() {
                     style={{ objectPosition: index >= 4 ? 'center' : 'left center' }}
                   />
                   <span className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/5" />
-                  <span className="absolute bottom-4 left-4 flex items-center gap-3 font-mono text-[9px] uppercase tracking-[0.2em] text-white sm:hidden">
+                  <span className="absolute bottom-4 left-4 flex items-center gap-3 rounded-full border border-white/20 bg-black/50 px-3 py-2 font-mono text-[9px] uppercase tracking-[0.2em] text-white backdrop-blur-sm">
                     View case study <span aria-hidden="true">↗</span>
                   </span>
                 </button>
 
                 <div className="mt-4 flex items-start justify-between gap-5 sm:mt-5">
-                  <p className="max-w-xl text-sm font-extralight leading-relaxed text-white/65 sm:text-base">{project.overview}</p>
-                  <p className="hidden shrink-0 font-mono text-[9px] uppercase tracking-[0.16em] text-white/35 sm:block">{project.stack.join(' / ')}</p>
+                  <p className="max-w-xl text-sm font-extralight leading-relaxed text-white/78 sm:text-base">{project.overview}</p>
+                  <p className="hidden shrink-0 font-mono text-[9px] uppercase tracking-[0.16em] text-white/55 sm:block">{project.stack.join(' / ')}</p>
                 </div>
               </motion.div>
             </section>
@@ -497,17 +521,17 @@ export default function Home() {
         </main>
 
         <div className="pointer-events-none fixed inset-x-6 bottom-[calc(1.5rem+env(safe-area-inset-bottom))] z-30 flex items-end justify-end gap-6 sm:bottom-5 lg:justify-between">
-          <div className="hidden max-w-xs text-xs font-extralight leading-relaxed text-white/45 lg:block">
+          <div className="hidden max-w-xs text-xs font-extralight leading-relaxed text-white/65 lg:block">
             Commerce platforms, digital products, and systems built for real-world complexity.
           </div>
-          <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-2 font-mono text-[9px] tracking-[0.18em] text-white/40 sm:flex">
+          <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-2 font-mono text-[9px] tracking-[0.18em] text-white/65 sm:flex">
             <span className="text-white">{String(activeSlide + 1).padStart(2, '0')}</span>
             <span className="h-px w-8 bg-white/20"><span className="block h-full bg-[#8fffe8] transition-all duration-500" style={{ width: `${((activeSlide + 1) / projects.length) * 100}%` }} /></span>
             <span>{String(projects.length).padStart(2, '0')}</span>
           </div>
           <a
             href="mailto:dillonmarinez@gmail.com?subject=Project%20inquiry"
-            className="pointer-events-auto flex min-h-11 shrink-0 items-center whitespace-nowrap text-[10px] uppercase tracking-[0.18em] text-white/55 transition hover:text-[#8fffe8]"
+            className="pointer-events-auto flex min-h-11 shrink-0 items-center whitespace-nowrap text-[10px] uppercase tracking-[0.18em] text-white/80 transition hover:text-[#8fffe8]"
           >
             <span className="hidden min-[360px]:inline">Let&apos;s talk</span>
             <span className="min-[360px]:hidden">Contact</span> ↗
