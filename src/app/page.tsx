@@ -85,6 +85,21 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                   {project.stack.join(' / ')}
                 </dd>
               </div>
+              {project.url && (
+                <div>
+                  <dt className="text-[10px] uppercase tracking-[0.22em] text-white/40">Live</dt>
+                  <dd className="mt-2 text-sm text-white/90">
+                    <a
+                      href={project.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="border-b border-[#8fffe8] pb-1 text-[#a6ffed] transition hover:text-white"
+                    >
+                      Visit project ↗
+                    </a>
+                  </dd>
+                </div>
+              )}
             </dl>
           </div>
         </motion.div>
@@ -393,6 +408,11 @@ export default function Home() {
           <ol className="space-y-2.5">
             {projects.map((project, index) => (
               <li key={project.id}>
+                {(index === 0 || project.category !== projects[index - 1].category) && (
+                  <p className={`${index === 0 ? 'mb-2' : 'mb-2 mt-5'} font-mono text-[8px] uppercase tracking-[0.2em] text-[#8fffe8]/65`}>
+                    {project.category}
+                  </p>
+                )}
                 <button
                   type="button"
                   onClick={() => scrollToProject(index)}
@@ -435,7 +455,7 @@ export default function Home() {
               >
                 <div className="mb-4 flex items-end justify-between sm:mb-5">
                   <div>
-                    <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#8fffe8]">Case {project.index} / {project.year}</p>
+                    <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-[#8fffe8]">{project.category} / Case {project.index} / {project.year}</p>
                     <h2 className="mt-2 text-[clamp(2rem,5vw,4.8rem)] font-extralight leading-none tracking-[-0.055em]">{project.name}</h2>
                   </div>
                   <p className="hidden max-w-[18rem] text-right text-xs leading-relaxed text-white/42 sm:block">{project.role}<br />{project.context}</p>

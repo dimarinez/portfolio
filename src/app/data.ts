@@ -2,10 +2,12 @@ export interface Project {
   id: string;
   name: string;
   index: string;
+  category: 'Flagship / Enterprise' | 'Independent / Creative';
   image: string;
   year: string;
   role: string;
   context: string;
+  url?: string;
   stack: string[];
   overview: string;
   outcome: string;
@@ -19,6 +21,7 @@ export const projects: Project[] = [
     id: 'pga',
     name: 'PGA TOUR Superstore',
     index: '01',
+    category: 'Flagship / Enterprise',
     image: '/screenshots/pga.png',
     year: '2021-2025',
     role: 'Senior Full Stack Developer',
@@ -45,6 +48,7 @@ export const projects: Project[] = [
     id: 'ugg',
     name: 'UGG',
     index: '02',
+    category: 'Flagship / Enterprise',
     image: '/screenshots/ugg.png',
     year: '2020-2021',
     role: 'Lead Software Engineer',
@@ -70,6 +74,7 @@ export const projects: Project[] = [
     id: 'asics',
     name: 'ASICS',
     index: '03',
+    category: 'Flagship / Enterprise',
     image: '/screenshots/asics.png',
     year: '2021-2025',
     role: 'Senior Full Stack Developer',
@@ -96,6 +101,7 @@ export const projects: Project[] = [
     id: 'prana',
     name: 'prAna',
     index: '04',
+    category: 'Flagship / Enterprise',
     image: '/screenshots/prana.png',
     year: '2016-2019',
     role: 'Web Developer II',
@@ -123,6 +129,7 @@ export const projects: Project[] = [
     id: 'disney',
     name: 'Disney',
     index: '05',
+    category: 'Flagship / Enterprise',
     image: '/screenshots/disney.png',
     year: '2021-2025',
     role: 'Senior Full Stack Developer',
@@ -148,9 +155,69 @@ export const projects: Project[] = [
     ],
   },
   {
+    id: 'groove-motive',
+    name: 'Groove Motive Records',
+    index: '06',
+    category: 'Independent / Creative',
+    image: '/projects/groove-motive/hero.jpg',
+    year: '2025-2026',
+    role: 'Lead Designer / Frontend Developer',
+    context: 'Chize LLC / Independent engagement',
+    url: 'https://www.groovemotiverecs.com/',
+    stack: ['React', 'Three.js', 'GSAP', 'WebGL'],
+    overview:
+      'An immersive digital home for an independent Los Angeles record label, spanning releases, events, video, and an explorable 3D listening room.',
+    outcome:
+      'Created a distinctive, responsive label experience that turns the music catalog into a visual world fans can browse, watch, and explore.',
+    credit: 'Independent client engagement delivered through Chize LLC.',
+    galleryImages: [
+      '/projects/groove-motive/hero.jpg',
+      '/projects/groove-motive/gallery-controls.jpg',
+      '/projects/groove-motive/releases.jpg',
+      '/projects/groove-motive/events.jpg',
+      '/projects/groove-motive/videos.jpg',
+      '/projects/groove-motive/about.jpg',
+    ],
+    contributions: [
+      'Led interface design and frontend development across the label, release, event, and video experiences',
+      'Built an interactive WebGL listening room that turns album artwork into an explorable music archive',
+      'Combined React, Three.js, and GSAP into a responsive experience with a clear, editorial visual system',
+    ],
+  },
+  {
+    id: 'there-is-a-light',
+    name: 'There Is A Light Foundation',
+    index: '07',
+    category: 'Independent / Creative',
+    image: '/projects/there-is-a-light/hero.jpg',
+    year: '2025-2026',
+    role: 'Lead Designer / Full Stack Developer',
+    context: 'Chize LLC / Independent engagement',
+    url: 'https://thereisalightfoundation.org/',
+    stack: ['Next.js', 'Payload CMS', 'MongoDB', 'Responsive UI'],
+    overview:
+      'A content-rich nonprofit platform connecting scholarship applicants with resources while giving the foundation a clear way to communicate its mission and impact.',
+    outcome:
+      'Delivered a responsive public experience and custom publishing system for programs, scholar stories, impact reporting, and a media-rich grant application workflow.',
+    credit: 'Independent client engagement delivered through Chize LLC.',
+    galleryImages: [
+      '/projects/there-is-a-light/hero.jpg',
+      '/projects/there-is-a-light/mission.jpg',
+      '/projects/there-is-a-light/impact.jpg',
+      '/projects/there-is-a-light/application-hero.jpg',
+      '/projects/there-is-a-light/application-form.jpg',
+    ],
+    contributions: [
+      'Designed and built the responsive Next.js experience and a custom Payload CMS publishing workflow',
+      'Structured flexible content for programs, impact reporting, scholar profiles, testimonials, and supporting pages',
+      'Created clear user journeys for grant applications, video submissions, donations, and success stories',
+    ],
+  },
+  {
     id: 'sackcloth',
     name: 'Sackcloth & Ashes',
-    index: '06',
+    index: '08',
+    category: 'Independent / Creative',
     image: '/screenshots/sackcloth.png',
     year: '2020',
     role: 'Shopify Developer',
