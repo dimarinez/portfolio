@@ -155,9 +155,38 @@ export const projects: Project[] = [
     ],
   },
   {
+    id: 'inkfire',
+    name: 'Inkfire',
+    index: '06',
+    category: 'Flagship / Enterprise',
+    image: '/projects/inkfire/template-workspace.png',
+    year: '2025-2026',
+    role: 'Lead Full Stack Developer',
+    context: 'REN Athletics / Elyon Technology',
+    stack: ['React', 'TypeScript', 'Django', 'PostgreSQL'],
+    overview:
+      'A production platform that turns custom uniform artwork, roster data, and sizing rules into reviewable, print-ready files.',
+    outcome:
+      'Brought template setup, order intake, live personalization, asset libraries, and production files into one operational workspace for sales and factory teams.',
+    credit:
+      'Internal platform built for REN Athletics through Elyon Technology. Screens shown use local test data.',
+    galleryImages: [
+      '/projects/inkfire/template-workspace.png',
+      '/projects/inkfire/personalization-editor.png',
+      '/projects/inkfire/paired-garment-workflow.png',
+      '/projects/inkfire/order-management.png',
+      '/projects/inkfire/font-library.png',
+    ],
+    contributions: [
+      'Led full-stack product development across the React interface, Django services, and production data model',
+      'Designed a live garment-personalization workspace for names, numbers, placement controls, and paired uniform pieces',
+      'Built document-processing workflows that validate source artwork and generate consistent production files across roster and size runs',
+    ],
+  },
+  {
     id: 'groove-motive',
     name: 'Groove Motive Records',
-    index: '06',
+    index: '07',
     category: 'Independent / Creative',
     image: '/projects/groove-motive/hero.jpg',
     year: '2025-2026',
@@ -187,7 +216,7 @@ export const projects: Project[] = [
   {
     id: 'there-is-a-light',
     name: 'There Is A Light Foundation',
-    index: '07',
+    index: '08',
     category: 'Independent / Creative',
     image: '/projects/there-is-a-light/hero.jpg',
     year: '2025-2026',
@@ -217,7 +246,7 @@ export const projects: Project[] = [
   {
     id: 'sackcloth',
     name: 'Sackcloth & Ashes',
-    index: '08',
+    index: '09',
     category: 'Independent / Creative',
     image: '/screenshots/sackcloth.png',
     year: '2020',
