@@ -192,7 +192,7 @@ function ProfileModal({ onClose }: { onClose: () => void }) {
 
       <div className="mx-auto max-w-[1500px] px-5 pb-20 pt-24 sm:px-10 sm:pt-28 lg:px-16">
         <div className="border-b border-black/20 pb-5 font-mono text-[10px] uppercase tracking-[0.22em] text-black/65 sm:text-xs">
-          Profile / California + Miami / 2026
+          Profile / San Diego + Miami / 2026
         </div>
 
         <motion.h2
@@ -407,7 +407,7 @@ export default function Home() {
               onClick={() => scrollToProject(0)}
               className="mt-2 hidden font-mono text-[9px] uppercase tracking-[0.22em] text-white/60 transition hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8fffe8] lg:block"
             >
-              California + Miami / Available for select projects
+              San Diego + Miami / Available for select projects
             </button>
           </div>
 
